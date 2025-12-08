@@ -1,0 +1,417 @@
+/* Open Scheduler - Custom CSS (Dark Theme) */
+
+:root {
+  /* Colors */
+  --bg-primary: #0F1419;
+  --bg-secondary: #1A1F26;
+  --bg-hover: #252C35;
+  --text-primary: #E6EDF3;
+  --text-secondary: #8B949E;
+  --accent-blue: #1F6FEB;
+  --success-green: #3FB950;
+  --error-red: #F85149;
+  --warning-orange: #D29922;
+  --border: #30363D;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}
+
+/* Global Styles */
+body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.nav-link {
+  color: var(--text-secondary) !important;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent-blue) !important;
+}
+
+.nav-link.active {
+  color: var(--accent-blue) !important;
+  font-weight: 500;
+}
+
+/* Cards */
+.card {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  background-color: var(--bg-hover) !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600;
+}
+
+.card-body {
+  color: var(--text-primary) !important;
+}
+
+/* Job Cards */
+.job-card {
+  border-left: 3px solid transparent;
+}
+
+.job-card:hover {
+  border-left-color: var(--accent-blue);
+}
+
+/* Badges */
+.status-badge {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.65rem;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+.btn-outline-success {
+  border-color: var(--success-green);
+  color: var(--success-green);
+}
+
+.btn-outline-success:hover {
+  background-color: var(--success-green);
+  border-color: var(--success-green);
+}
+
+.btn-outline-warning {
+  border-color: var(--warning-orange);
+  color: var(--warning-orange);
+}
+
+.btn-outline-warning:hover {
+  background-color: var(--warning-orange);
+  border-color: var(--warning-orange);
+}
+
+.btn-outline-danger {
+  border-color: var(--error-red);
+  color: var(--error-red);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--error-red);
+  border-color: var(--error-red);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+  background-color: var(--bg-hover) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--bg-hover) !important;
+  border-color: var(--accent-blue) !important;
+  box-shadow: 0 0 0 0.2rem rgba(31, 111, 235, 0.25) !important;
+  color: var(--text-primary) !important;
+}
+
+.form-label {
+  color: var(--text-primary) !important;
+  font-weight: 500;
+}
+
+/* Tables */
+.table {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border) !important;
+}
+
+.table thead th {
+  background-color: var(--bg-primary) !important;
+  border-bottom: 2px solid var(--accent-blue) !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.table tbody td {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--border) !important;
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background-color: var(--bg-hover) !important;
+}
+
+.table tbody tr:hover td {
+  background-color: var(--bg-hover) !important;
+}
+
+.table-bordered {
+  border: 1px solid var(--border) !important;
+}
+
+.table-bordered td,
+.table-bordered th {
+  border: 1px solid var(--border) !important;
+}
+
+/* Modals */
+.modal-content {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--border) !important;
+}
+
+/* KPI Cards */
+.kpi-card {
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+.kpi-card .kpi-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+.kpi-card .kpi-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* File Tree */
+.file-tree {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9rem;
+}
+
+.file-tree-item {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.file-tree-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.file-tree-item.selected {
+  background-color: var(--accent-blue);
+  color: white;
+}
+
+/* Code Preview */
+.code-preview {
+  background-color: #0D1117;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: var(--spacing-md);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  max-height: 400px;
+}
+
+/* Upload */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.upload-zone:hover {
+  border-color: var(--accent-blue);
+  background-color: var(--bg-hover);
+}
+
+/* Accordion Dark Theme */
+.accordion-dark .accordion-item {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+
+.accordion-dark .accordion-button {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: none;
+}
+
+.accordion-dark .accordion-button:not(.collapsed) {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.accordion-dark .accordion-button:focus {
+  box-shadow: none;
+  border-color: var(--accent-blue);
+}
+
+.accordion-dark .accordion-body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* File Tree Visual */
+.tree-folder {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+  user-select: none;
+}
+
+.tree-folder:hover {
+  background-color: var(--bg-hover);
+}
+
+.tree-folder-icon {
+  display: inline-block;
+  width: 20px;
+  margin-right: 6px;
+  font-weight: bold;
+  color: var(--accent-blue);
+}
+
+.tree-file {
+  cursor: pointer;
+  padding: 6px 12px 6px 38px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+}
+
+.tree-file:hover {
+  background-color: var(--bg-hover);
+}
+
+.tree-file.selected {
+  background-color: var(--accent-blue);
+  color: white;
+}
+
+.tree-file-icon {
+  margin-right: 8px;
+  color: var(--text-secondary);
+}
+
+.tree-children {
+  margin-left: 20px;
+  border-left: 1px solid var(--border);
+  padding-left: 0;
+}
+
+/* Utilities */
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+.text-success {
+  color: var(--success-green) !important;
+}
+
+.text-danger {
+  color: var(--error-red) !important;
+}
+
+.text-warning {
+  color: var(--warning-orange) !important;
+}
+
+.text-info {
+  color: var(--accent-blue) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kpi-card .kpi-value {
+    font-size: 2rem;
+  }
+  
+  .job-card {
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-hover);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}

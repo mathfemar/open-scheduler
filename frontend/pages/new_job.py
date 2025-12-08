@@ -275,14 +275,14 @@ def update_file_tree(n_clicks):
                 color="warning",
             )
         
-        # Collect all files from tracked directories
+        # Collect files from tracked directories (with limits)
         all_files = []
+        max_files_per_dir = 250  # Limit files per directory
+        
         for td in tracked_dirs:
-            print(f"[DEBUG] Checking directory: {td.path}, exists: {os.path.exists(td.path)}")
             if os.path.exists(td.path):
                 try:
-                    files = list_files(td.path)
-                    print(f"[DEBUG] Found {len(files)} .py files in {td.path}")
+                    files = list_files(td.path, max_depth=3, max_files=max_files_per_dir)
                     for f in files:
                         f["tracked_dir_id"] = td.id
                         f["tracked_dir_path"] = td.path
@@ -290,113 +290,78 @@ def update_file_tree(n_clicks):
                 except Exception as e:
                     print(f"[ERROR] Failed to list files in {td.path}: {e}")
         
-        print(f"[DEBUG] Total files collected: {len(all_files)}")
-        
         if not all_files:
             return dbc.Alert(
-                "No Python files found in tracked directories.",
+                "No Python files found in tracked directories (search limited to 3 levels deep).",
                 color="info",
             )
         
-        # Build hierarchical tree structure
-        def build_tree_structure(files, root_path):
-            """Organize files into folder hierarchy."""
-            tree = {"files": [], "folders": {}}
-            
-            for f in files:
-                rel_path = f["relpath"]
-                parts = rel_path.split(os.sep)
-                
-                # Navigate/create folder structure
-                current = tree
-                for i, part in enumerate(parts[:-1]):
-                    if part not in current["folders"]:
-                        current["folders"][part] = {"files": [], "folders": {}}
-                    current = current["folders"][part]
-                
-                # Add file to final folder
-                if "files" not in current:
-                    current["files"] = []
-                current["files"].append(f)
-            
-            return tree
+        # Simple flat list with search (much faster than tree)
+        # Group by directory for organization
+        files_by_dir = {}
+        for f in all_files:
+            dir_name = os.path.dirname(f["relpath"]) or "root"
+            if dir_name not in files_by_dir:
+                files_by_dir[dir_name] = []
+            files_by_dir[dir_name].append(f)
         
-        # Build tree UI components
-        def render_tree(tree_dict, path_prefix="", depth=0):
-            """Recursively render tree structure with collapsible folders."""
-            elements = []
+        # Build simple list with directory headers
+        file_list = []
+        
+        # Show info about limits
+        if len(all_files) >= 500:
+            file_list.append(
+                dbc.Alert(
+                    "Showing first 500 files. Use search or upload to find specific files.",
+                    color="info",
+                    className="mb-3",
+                )
+            )
+        
+        for dir_path in sorted(files_by_dir.keys())[:50]:  # Max 50 directories shown
+            files = files_by_dir[dir_path]
             
-            # Render folders
-            for folder_name, folder_data in sorted(tree_dict["folders"].items()):
-                folder_id = f"folder-{path_prefix}-{folder_name}".replace(os.sep, "-").replace(" ", "_")
-                
-                # Folder header (clickable to expand/collapse)
-                folder_header = html.Div(
+            # Directory header
+            file_list.append(
+                html.Div(
                     [
-                        html.Span("▶ ", className="tree-folder-icon", id={"type": "folder-icon", "id": folder_id}),
                         html.I(className="bi bi-folder me-2", style={"color": "var(--warning-orange)"}),
-                        html.Span(folder_name, style={"fontWeight": "500"}),
+                        html.Strong(dir_path),
+                        html.Small(f" ({len(files)} files)", className="text-muted ms-2"),
                     ],
-                    className="tree-folder",
-                    id={"type": "folder-toggle", "id": folder_id},
-                    n_clicks=0,
+                    className="mb-2 mt-3",
+                    style={"fontSize": "0.95rem", "borderBottom": "1px solid var(--border)", "paddingBottom": "4px"},
                 )
-                
-                # Folder children (initially hidden)
-                folder_children = html.Div(
-                    render_tree(folder_data, f"{path_prefix}/{folder_name}", depth + 1),
-                    className="tree-children",
-                    id={"type": "folder-content", "id": folder_id},
-                    style={"display": "none"},
-                )
-                
-                elements.append(html.Div([folder_header, folder_children]))
+            )
             
-            # Render files in current folder
-            for f in sorted(tree_dict["files"], key=lambda x: x["relpath"]):
-                file_element = html.Div(
-                    [
-                        html.I(className="bi bi-file-code tree-file-icon"),
-                        html.Span(os.path.basename(f["relpath"]), style={"fontWeight": "400"}),
-                        html.Small(f" ({f['size_kb']:.1f} KB)", className="text-muted ms-2"),
-                    ],
-                    className="tree-file",
-                    id={"type": "file-item", "path": f["abspath"]},
-                    n_clicks=0,
-                )
-                elements.append(file_element)
-            
-            return elements
-        
-        # Build complete tree for all tracked directories
-        tree_components = []
-        for td in tracked_dirs:
-            td_files = [f for f in all_files if f["tracked_dir_path"] == td.path]
-            if td_files:
-                tree_structure = build_tree_structure(td_files, td.path)
-                
-                # Root folder for this tracked directory
-                root_name = os.path.basename(td.path) or td.path
-                tree_components.append(
-                    html.Div(
+            # Files in this directory
+            for f in files[:20]:  # Max 20 files per directory shown
+                file_list.append(
+                    dbc.ListGroupItem(
                         [
-                            html.Div(
-                                [
-                                    html.I(className="bi bi-folder-fill me-2", style={"color": "var(--accent-blue)"}),
-                                    html.Strong(root_name),
-                                    html.Small(f" ({len(td_files)} files)", className="text-muted ms-2"),
-                                ],
-                                className="mb-2",
-                                style={"fontSize": "1rem", "padding": "8px 0"},
-                            ),
-                            html.Div(render_tree(tree_structure, root_name), className="ms-3"),
+                            html.I(className="bi bi-file-code me-2", style={"color": "var(--text-secondary)"}),
+                            html.Span(os.path.basename(f["relpath"]), style={"fontWeight": "400"}),
+                            html.Small(f" ({f['size_kb']:.1f} KB)", className="text-muted ms-2"),
                         ],
-                        className="mb-4",
+                        id={"type": "file-item", "path": f["abspath"]},
+                        action=True,
+                        className="py-2",
+                        n_clicks=0,
                     )
                 )
+            
+            if len(files) > 20:
+                file_list.append(
+                    html.Small(f"... and {len(files) - 20} more files in this directory", className="text-muted ms-4")
+                )
         
-        result = html.Div(tree_components, style={"maxHeight": "500px", "overflowY": "auto"})
-        print(f"[DEBUG] Returning tree with {len(tree_components)} root folders")
+        result = html.Div(
+            [
+                html.P(f"Found {len(all_files)} Python files (showing grouped by directory)", className="text-muted small mb-2"),
+                dbc.ListGroup(file_list, flush=True),
+            ],
+            style={"maxHeight": "500px", "overflowY": "auto"},
+        )
         return result
     
     except Exception as e:
